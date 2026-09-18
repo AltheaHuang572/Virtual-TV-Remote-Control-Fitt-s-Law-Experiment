@@ -3,43 +3,305 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Virtual TV Remote Fitts' Law Experiment</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 30px;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        .description {
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        /* Remote control body */
+        #remote {
+            width: 280px;
+            margin: auto;
+            padding: 25px 20px 30px;
+
+            background-color: #202020;
+
+            border-radius: 35px;
+
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        /* General button */
+        .remote-button {
+            border: none;
+
+            background-color: #eeeeee;
+            color: #111;
+
+            cursor: pointer;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            transition: 0.15s;
+        }
+
+        .remote-button:hover {
+            background-color: #cccccc;
+        }
+
+        /* Top row */
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .power {
+            width: 50px;
+            height: 50px;
+
+            border-radius: 50%;
+
+            background-color: #d93636;
+            color: white;
+        }
+
+        .menu {
+            width: 50px;
+            height: 50px;
+
+            border-radius: 50%;
+        }
+
+        /* Navigation area */
+        .navigation {
+            display: grid;
+
+            grid-template-columns: 60px 60px 60px;
+            grid-template-rows: 55px 55px 55px;
+
+            justify-content: center;
+
+            margin-bottom: 25px;
+        }
+
+        .nav-button {
+            width: 50px;
+            height: 50px;
+
+            border-radius: 50%;
+        }
+
+        .up {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .left {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        .ok {
+            grid-column: 2;
+            grid-row: 2;
+
+            background-color: #555;
+            color: white;
+        }
+
+        .right {
+            grid-column: 3;
+            grid-row: 2;
+        }
+
+        .down {
+            grid-column: 2;
+            grid-row: 3;
+        }
+
+        /* Volume / Channel */
+        .control-row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 25px;
+        }
+
+        .long-button {
+            width: 65px;
+            height: 70px;
+
+            border-radius: 12px;
+
+            font-size: 14px;
+        }
+
+        /* Number pad */
+        .number-pad {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 55px);
+
+            gap: 12px;
+
+            justify-content: center;
+        }
+
+        .number-button {
+            width: 55px;
+            height: 55px;
+
+            border-radius: 50%;
+        }
+
+        /* Bottom buttons */
+        .bottom-row {
+            display: flex;
+            justify-content: space-around;
+
+            margin-top: 25px;
+        }
+
+        .bottom-button {
+            width: 75px;
+            height: 40px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+        }
+
+    </style>
 </head>
+
 
 <body>
 
-    <h1>Virtual TV Remote Control</h1>
+    <h1>
+        Virtual TV Remote Control
+    </h1>
 
-    <p>
+    <p class="description">
         Click the highlighted button as quickly and accurately as possible.
     </p>
+
 
     <!-- Remote Control -->
     <div id="remote">
 
-        <button>Power</button>
 
-        <button>▲</button>
-        <button>◀</button>
-        <button>OK</button>
-        <button>▶</button>
-        <button>▼</button>
+        <!-- Top Buttons -->
+        <div class="top-row">
 
-        <button>1</button>
-        <button>2</button>
-        <button>3</button>
+            <button
+                class="remote-button power">
+                ⏻
+            </button>
 
-        <button>4</button>
-        <button>5</button>
-        <button>6</button>
+            <button
+                class="remote-button menu">
+                MENU
+            </button>
 
-        <button>7</button>
-        <button>8</button>
-        <button>9</button>
+        </div>
 
-        <button>0</button>
+
+        <!-- Navigation Buttons -->
+        <div class="navigation">
+
+            <button
+                class="remote-button nav-button up">
+                ▲
+            </button>
+
+            <button
+                class="remote-button nav-button left">
+                ◀
+            </button>
+
+            <button
+                class="remote-button nav-button ok">
+                OK
+            </button>
+
+            <button
+                class="remote-button nav-button right">
+                ▶
+            </button>
+
+            <button
+                class="remote-button nav-button down">
+                ▼
+            </button>
+
+        </div>
+
+
+        <!-- Volume / Channel -->
+        <div class="control-row">
+
+            <button
+                class="remote-button long-button">
+                VOL<br>+ / −
+            </button>
+
+            <button
+                class="remote-button long-button">
+                CH<br>+ / −
+            </button>
+
+        </div>
+
+
+        <!-- Number Pad -->
+        <div class="number-pad">
+
+            <button class="remote-button number-button">1</button>
+            <button class="remote-button number-button">2</button>
+            <button class="remote-button number-button">3</button>
+
+            <button class="remote-button number-button">4</button>
+            <button class="remote-button number-button">5</button>
+            <button class="remote-button number-button">6</button>
+
+            <button class="remote-button number-button">7</button>
+            <button class="remote-button number-button">8</button>
+            <button class="remote-button number-button">9</button>
+
+            <button class="remote-button number-button">*</button>
+            <button class="remote-button number-button">0</button>
+            <button class="remote-button number-button">#</button>
+
+        </div>
+
+
+        <!-- Bottom Buttons -->
+        <div class="bottom-row">
+
+            <button
+                class="remote-button bottom-button">
+                BACK
+            </button>
+
+            <button
+                class="remote-button bottom-button">
+                HOME
+            </button>
+
+        </div>
 
     </div>
 
 </body>
+
 </html>
