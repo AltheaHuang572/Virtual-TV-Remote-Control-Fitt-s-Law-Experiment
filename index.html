@@ -180,10 +180,49 @@
 
             font-size: 13px;
         }
+/* Experiment Panel */
 
+.experiment-panel {
+    margin-bottom: 25px;
+}
+
+#start-button {
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: #2d7ff9;
+    color: white;
+
+    cursor: pointer;
+}
+
+#start-button:hover {
+    background-color: #1d63c7;
+}
+
+#start-button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+}
+
+
+/* Highlighted Target */
+
+.target {
+    background-color: #ffd633 !important;
+
+    outline: 5px solid #ff9800;
+
+    box-shadow: 0 0 18px #ffd633;
+
+    transform: scale(1.08);
+}
     </style>
 </head>
-
 
 <body>
 
@@ -192,12 +231,38 @@
     </h1>
 
     <p class="description">
-        Click the highlighted button as quickly and accurately as possible.
+    Click the highlighted button as quickly and accurately as possible.
+</p>
+
+
+<!-- Experiment Status -->
+<div class="experiment-panel">
+
+    <button id="start-button">
+        Start Experiment
+    </button>
+
+    <p id="status">
+        Press Start Experiment to begin.
     </p>
 
+    <p>
+        Trial:
+        <strong id="trial-count">0</strong>
+        /
+        <strong id="total-trials">100</strong>
 
-    <!-- Remote Control -->
-    <div id="remote">
+        &nbsp;&nbsp;
+
+        Misses:
+        <strong id="miss-count">0</strong>
+    </p>
+
+</div>
+
+
+<!-- Remote Control -->
+<div id="remote">
 
 
         <!-- Top Buttons -->
@@ -314,6 +379,165 @@
 
     </div>
 
+    <script>
+        
+        // =========================
+        // Experiment Settings
+        // =========================
+        
+        const TOTAL_TRIALS = 20;
+
+        let currentTrial = 0;
+        let misses = 0;
+
+        let currentTarget = null;
+        let experimentRunning = false;
+
+
+        // Get HTML elements
+        const targetButtons =
+            Array.from(document.querySelectorAll(".target-button"));
+
+        const startButton =
+            document.getElementById("start-button");
+
+        const statusText =
+            document.getElementById("status");
+
+        const trialCount =
+            document.getElementById("trial-count");
+
+        const missCount =
+            document.getElementById("miss-count");
+
+        const totalTrials =
+            document.getElementById("total-trials");
+
+
+        totalTrials.textContent = TOTAL_TRIALS;
+
+
+        // =========================
+        // Start Experiment
+        // =========================
+
+        startButton.addEventListener("click", function () {
+
+            currentTrial = 0;
+            misses = 0;
+
+            experimentRunning = true;
+
+            trialCount.textContent = currentTrial;
+            missCount.textContent = misses;
+
+            startButton.disabled = true;
+
+            statusText.textContent =
+                "Click the highlighted button!";
+
+            generateNextTarget();
+
+        });
+
+
+        // =========================
+        // Generate Random Target
+        // =========================
+
+        function generateNextTarget() {
+
+            // Remove previous highlight
+            targetButtons.forEach(function (button) {
+                button.classList.remove("target");
+            });
+
+
+            // Experiment finished
+            if (currentTrial >= TOTAL_TRIALS) {
+
+                experimentRunning = false;
+                currentTarget = null;
+
+                statusText.textContent =
+                    "Experiment completed!";
+
+                startButton.disabled = false;
+                startButton.textContent =
+                    "Restart Experiment";
+
+                return;
+            }
+
+
+            // Select random target
+            let nextTarget;
+
+            do {
+
+                const randomIndex =
+                    Math.floor(Math.random() * targetButtons.length);
+
+                nextTarget =
+                    targetButtons[randomIndex];
+
+            } while (nextTarget === currentTarget);
+
+
+            currentTarget = nextTarget;
+
+            currentTarget.classList.add("target");
+
+        }
+
+
+        // =========================
+        // Handle Button Click
+        // =========================
+
+        targetButtons.forEach(function (button) {
+
+            button.addEventListener("click", function () {
+
+                if (!experimentRunning) {
+                    return;
+                }
+
+
+                // Correct
+                if (button === currentTarget) {
+
+                    currentTrial++;
+
+                    trialCount.textContent =
+                        currentTrial;
+
+                    statusText.textContent =
+                        "Correct!";
+
+                    generateNextTarget();
+
+                }
+
+                // Miss
+                else {
+
+                    misses++;
+
+                    missCount.textContent =
+                        misses;
+
+                    statusText.textContent =
+                        "Miss! Try the highlighted button.";
+
+                }
+
+            });
+
+        });
+        
+    </script>
+        
 </body>
 
 </html>
