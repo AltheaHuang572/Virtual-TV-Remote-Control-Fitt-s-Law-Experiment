@@ -777,6 +777,54 @@
 
         }
     );
+
+// ==========================================
+// Analyze Button Distances
+// ==========================================
+
+function analyzeButtonDistances() {
+
+    const results = [];
+
+    for (let i = 0; i < targetButtons.length; i++) {
+
+        for (let j = i + 1; j < targetButtons.length; j++) {
+
+            const buttonA = targetButtons[i];
+            const buttonB = targetButtons[j];
+
+            const rectA = buttonA.getBoundingClientRect();
+            const rectB = buttonB.getBoundingClientRect();
+
+            const xA = rectA.left + rectA.width / 2;
+            const yA = rectA.top + rectA.height / 2;
+
+            const xB = rectB.left + rectB.width / 2;
+            const yB = rectB.top + rectB.height / 2;
+
+            const dx = xB - xA;
+            const dy = yB - yA;
+
+            const distance = Math.sqrt(
+                dx * dx + dy * dy
+            );
+
+            results.push({
+                From: buttonA.dataset.name,
+                To: buttonB.dataset.name,
+                Distance_px: Number(distance.toFixed(2))
+            });
+        }
+    }
+
+    results.sort(function(a, b) {
+        return a.Distance_px - b.Distance_px;
+    });
+
+    console.table(results);
+
+    return results;
+}
         
     </script>
         
