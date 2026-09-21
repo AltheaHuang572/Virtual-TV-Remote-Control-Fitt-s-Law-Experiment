@@ -627,16 +627,127 @@ function getButtonDistance(buttonA, buttonB) {
 
         function generateNextTarget() {
 
-            // Remove previous highlight
-           targetButtons.forEach(function (button) {
-
-    button.classList.remove("target");
-    button.classList.remove("target-small");
-    button.classList.remove("target-large");
-
-});
+    // Remove previous visual states
+    targetButtons.forEach(function(button) {
+        button.classList.remove("target");
+        button.classList.remove("target-small");
+        button.classList.remove("target-large");
+    });
 
 
+    // Get condition for current trial
+    currentCondition =
+        conditionList[currentTrial];
+
+
+    const distanceRule =
+        DISTANCE_LEVELS[currentCondition.distance];
+
+
+    // ==========================================
+    // Always calculate distance FROM OK
+    // ==========================================
+
+    const candidates =
+        targetButtons.filter(function(button) {
+
+            // OK itself cannot be the target
+            if (button === okButton) {
+                return false;
+            }
+
+            const distance =
+                getButtonDistance(
+                    okButton,
+                    button
+                );
+
+            return (
+                distance >= distanceRule.min &&
+                distance <= distanceRule.max
+            );
+
+        });
+
+
+    console.log(
+        "Trial:",
+        currentTrial + 1,
+        "Condition:",
+        currentCondition.distance,
+        currentCondition.width,
+        "Candidates:",
+        candidates.length
+    );
+
+
+    if (candidates.length === 0) {
+
+        console.error(
+            "No valid target found!",
+            currentCondition
+        );
+
+        return;
+    }
+
+
+    // Randomly select valid target
+    const randomIndex =
+        Math.floor(
+            Math.random() *
+            candidates.length
+        );
+
+    const nextTarget =
+        candidates[randomIndex];
+
+
+    // Start position is ALWAYS OK
+    previousTarget = okButton;
+
+    currentTarget = nextTarget;
+
+
+    // Highlight target
+    currentTarget.classList.add("target");
+
+
+    // Width condition
+    if (currentCondition.width === "Small") {
+
+        currentTarget.classList.add(
+            "target-small"
+        );
+
+    }
+
+    else if (currentCondition.width === "Large") {
+
+        currentTarget.classList.add(
+            "target-large"
+        );
+
+    }
+
+
+    waitingForStart = false;
+
+
+    instruction.textContent =
+        "Click the highlighted target";
+
+
+    console.log(
+        "New Target:",
+        currentTarget.dataset.name
+    );
+
+
+    // MT starts NOW
+    targetAppearTime =
+        performance.now();
+}
             // Experiment finished
             if (currentTrial >= TOTAL_TRIALS) {
 
