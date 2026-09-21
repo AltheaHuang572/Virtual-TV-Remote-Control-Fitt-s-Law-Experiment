@@ -732,8 +732,8 @@ function getButtonDistance(buttonA, buttonB) {
     waitingForStart = false;
 
 
-    instruction.textContent =
-        "Click the highlighted target";
+    statusText.textContent =
+    "Click the highlighted target";
 
 
     console.log(
@@ -880,10 +880,10 @@ function getButtonDistance(buttonA, buttonB) {
                     );
                 }
 
-                    // Trial completed
-                    currentTrial++;
+    // Trial completed
+currentTrial++;
 
-                    // Experiment finished
+// Experiment finished
 if (currentTrial >= TOTAL_TRIALS) {
 
     experimentRunning = false;
@@ -894,37 +894,34 @@ if (currentTrial >= TOTAL_TRIALS) {
         button.classList.remove("target-large");
     });
 
-          instruction.textContent =
+    statusText.textContent =
         "Experiment completed!";
 
     downloadButton.disabled = false;
 
-}  
-    // Next trial → return to OK
+}
+// Next trial → return to OK
 else {
 
     showStartButton();
 
 }
 
-// 關閉 if (button === currentTarget)
+} // 關閉 if (button === currentTarget)
+
+// Miss
+else {
+
+    totalMisses++;
+    trialMisses++;
+
+    missCount.textContent =
+        totalMisses;
+
+    statusText.textContent =
+        "Miss! Try the highlighted button.";
+
 }
-
-                // Miss
-                else {
-
-                    totalMisses++;
-                    trialMisses++;
-                    
-
-                    missCount.textContent =
-                        totalMisses;
-
-                    statusText.textContent =
-                        "Miss! Try the highlighted button.";
-
-                }
-
             });
 
         });
