@@ -25,3 +25,11 @@ _________
 - 固定從 OK 按鈕作為起始位置
 - 自動記錄 A、W、ID、MT、Miss
 - 可匯出 CSV
+_________
+<p>
+    The link to the screen recording:
+    <a href="https://drive.google.com/file/d/1ogZzke1tco-L8Q7nGqj6TKw0hkSV-eds/view?usp=sharing"
+       target="_blank">
+        View Recording
+    </a>
+</p>
