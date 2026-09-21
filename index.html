@@ -579,7 +579,15 @@ function createConditionList() {
             console.table(conditionList);
             
             currentTarget = null;
-            previousTarget = null;
+previousTarget = null;
+
+waitingForStart = true;
+
+okButton = targetButtons.find(function(button) {
+    return button.dataset.name === "OK";
+});
+
+experimentRunning = true;
             
             experimentRunning = true;
 
@@ -592,7 +600,7 @@ function createConditionList() {
             statusText.textContent =
                 "Click the highlighted button!";
 
-            generateNextTarget();
+            showStartButton();
 
         });
 
