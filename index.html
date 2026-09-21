@@ -923,6 +923,20 @@ console.log(
                     return;
                 }
 
+                // ==========================================
+                // Waiting for OK start position
+                // ==========================================
+
+                if (waitingForStart) {
+
+                    if (button === okButton) {
+
+                        generateNextTarget();
+
+                  }
+
+                 return;
+}
 
                 // Correct target
                 if (button === currentTarget) {
@@ -1033,15 +1047,29 @@ console.log(
                     // Trial completed
                     currentTrial++;
 
-                    trialCount.textContent =
-                        currentTrial;
+                    // Experiment finished
+if (currentTrial >= TOTAL_TRIALS) {
 
-                    statusText.textContent =
-                        "Correct!";
+    experimentRunning = false;
 
-                    generateNextTarget();
+    targetButtons.forEach(function(button) {
+        button.classList.remove("target");
+        button.classList.remove("target-small");
+        button.classList.remove("target-large");
+    });
 
-                }
+          instruction.textContent =
+        "Experiment completed!";
+
+    downloadButton.disabled = false;
+
+}  
+    // Next trial → return to OK
+else {
+
+    showStartButton();
+
+}
 
                 // Miss
                 else {
