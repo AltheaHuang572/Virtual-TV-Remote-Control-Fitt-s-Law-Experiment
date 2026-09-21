@@ -1,6 +1,6 @@
 # Virtual-TV-Remote-Control-Fitt-s-Law-Experiment
 This experiment applies Fitts’ Law to a virtual TV remote control. Users click highlighted buttons of different sizes and distances as quickly as possible. The experiment records target distance, target width, and movement time to investigate how remote-control button size and spatial layout affect user interaction efficiency.
-_
+___________
 Scenario：Virtual TV Remote Control
 使用者在觀看電視時，需要透過遙控器快速選擇頻道、輸入數字或操作功能按鈕。不同按鍵的大小（Target Width）以及按鍵與起始位置之間的距離（Target Distance），可能影響使用者完成操作所需的時間。因此，本實驗利用虛擬電視遙控器模擬真實操作情境，探討：按鍵距離與按鍵大小如何影響使用者的 Movement Time。
 _
