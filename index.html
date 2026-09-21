@@ -221,6 +221,28 @@
 
     transform: scale(1.08);
 }
+        
+#download-button {
+    padding: 12px 25px;
+    margin-left: 10px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: #28a745;
+    color: white;
+
+    cursor: pointer;
+}
+
+#download-button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+}
+        
     </style>
 </head>
 
@@ -241,7 +263,11 @@
     <button id="start-button">
         Start Experiment
     </button>
-
+    
+    <button id="download-button" disabled>
+    Download CSV
+    </button>
+    
     <p id="status">
         Press Start Experiment to begin.
     </p>
@@ -385,11 +411,18 @@
         const TOTAL_TRIALS = 100;
 
         let currentTrial = 0;
-        let misses = 0;
+        let totalMisses = 0;
+        let trialMisses = 0;
 
         let currentTarget = null;
-        let experimentRunning = false;
+        let previousTarget = null;
 
+        let targetAppearTime = 0;
+        
+        let experimentRunning = false;
+        
+        // Store all experimental data
+         let experimentData = [];
 
         // Get HTML elements
         const targetButtons =
@@ -397,6 +430,9 @@
 
         const startButton =
             document.getElementById("start-button");
+
+        const downloadButton = 
+            document.getElementById("download-button");
 
         const statusText =
             document.getElementById("status");
@@ -421,15 +457,23 @@
         startButton.addEventListener("click", function () {
 
             currentTrial = 0;
-            misses = 0;
+            
+            totalMisses = 0;
+            trialMisses = 0;
 
+            experimentData = [];
+            
+            currentTarget = null;
+            previousTarget = null;
+            
             experimentRunning = true;
 
-            trialCount.textContent = currentTrial;
-            missCount.textContent = misses;
+            trialCount.textContent = 0;
+            missCount.textContent = 0;
 
             startButton.disabled = true;
-
+            downloadButton.disabled = true;
+            
             statusText.textContent =
                 "Click the highlighted button!";
 
@@ -439,7 +483,7 @@
 
 
         // =========================
-        // Generate Random Target
+        // Generate Next Target
         // =========================
 
         function generateNextTarget() {
@@ -457,11 +501,13 @@
                 currentTarget = null;
 
                 statusText.textContent =
-                    "Experiment completed!";
+                    "Experiment completed! You can now download the CSV file.";
 
                 startButton.disabled = false;
                 startButton.textContent =
                     "Restart Experiment";
+
+                downloadButton.disabled = flase;
 
                 return;
             }
@@ -478,12 +524,23 @@
                 nextTarget =
                     targetButtons[randomIndex];
 
-            } while (nextTarget === currentTarget);
+            } 
+            while (nextTarget === currentTarget);
 
-
+ // Previous target becomes starting position
+            previousTarget = currentTarget;
+            
+            // set new target
             currentTarget = nextTarget;
 
             currentTarget.classList.add("target");
+
+            //reset miss count for this trail
+            trailMisses = 0;
+
+            //start MT timer
+            targetAppearTime = performance.now();
+            
 
         }
 
@@ -501,9 +558,106 @@
                 }
 
 
-                // Correct
+                // Correct target
                 if (button === currentTarget) {
 
+                    //stop timer
+                    const clickTime = 
+                        performance.now();
+                    
+                    const movementTime = 
+                        clickTime - targetAppearTime;
+                    
+                // First target has no previous target,
+                // therefore A cannot be calculated.
+                if (previousTarget !== null) {
+                    
+                     // Calculate centers
+                    const startRect =
+                        previousTarget.getBoundingClientRect();
+
+                    const targetRect =
+                        currentTarget.getBoundingClientRect();
+
+
+                    const startX =
+                        startRect.left +
+                        startRect.width / 2;
+
+                    const startY =
+                        startRect.top +
+                        startRect.height / 2;
+
+
+                    const targetX =
+                        targetRect.left +
+                        targetRect.width / 2;
+
+                    const targetY =
+                        targetRect.top +
+                        targetRect.height / 2;
+
+                    //distance A
+                    const deltaX = 
+                        targetX - startX;
+
+                    const deltaY = 
+                        targetY - startY;
+
+                    const A = 
+                        Math.sqrt(
+                            deltaX * deltaX + 
+                            deltaY * deltaY
+                        );
+
+                    //target width W
+                    const W = 
+                        Math.min(
+                            targetRect.width,
+                            targetRect.height
+                        );
+
+                     // Fitts' Law ID
+                    const ID = 
+                        Math.lod2(
+                            A / W + 1
+                        );
+
+                    //Save trail
+                    experimentData.push({
+                        
+                        Trial:
+                            currentTrail + 1,
+
+                        Start:
+                            previousTarget.dataset.name,
+                        
+                        Target:
+                            currentTarget.dataset.name,
+                        A:
+                            A.toFixed(2),
+                            
+                        W:
+                            W.toFixed(2),
+                    
+                        ID:
+                            ID.toFixed(4),
+                        
+                        MT:
+                            movementTime.toFixed(2),
+                        
+                        Miss:
+                            trialMisses
+                    });
+
+                    console.log(
+                        experimentData[
+                            experimentData.length - 1
+                        ]
+                    );
+                }
+
+                    // Trial completed
                     currentTrial++;
 
                     trialCount.textContent =
@@ -519,10 +673,12 @@
                 // Miss
                 else {
 
-                    misses++;
+                    totalMisses++;
+                    trialMisses++;
+                    
 
                     missCount.textContent =
-                        misses;
+                        totalmisses;
 
                     statusText.textContent =
                         "Miss! Try the highlighted button.";
@@ -532,6 +688,93 @@
             });
 
         });
+        
+        // Download CSV
+        downloadButton.addEventListener(
+        "click",
+        function () {
+
+
+            if (experimentData.length === 0) {
+
+                return;
+
+            }
+
+
+            const headers = [
+
+                "Trial",
+                "Start",
+                "Target",
+                "A_px",
+                "W_px",
+                "ID_bits",
+                "MT_ms",
+                "Miss"
+
+            ];
+
+
+            let csv =
+                headers.join(",") + "\n";
+
+
+            experimentData.forEach(
+                function (row) {
+
+                    csv += [
+
+                        row.Trial,
+                        row.Start,
+                        row.Target,
+                        row.A,
+                        row.W,
+                        row.ID,
+                        row.MT,
+                        row.Miss
+
+                    ].join(",") + "\n";
+
+                }
+            );
+
+
+            // Create CSV file
+            const blob =
+                new Blob(
+                    [csv],
+                    {
+                        type:
+                            "text/csv;charset=utf-8;"
+                    }
+                );
+
+
+            const url =
+                URL.createObjectURL(blob);
+
+
+            const link =
+                document.createElement("a");
+
+
+            link.href = url;
+
+            link.download =
+                "fitts_law_remote_data.csv";
+
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            document.body.removeChild(link);
+
+            URL.revokeObjectURL(url);
+
+        }
+    );
         
     </script>
         
