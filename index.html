@@ -276,7 +276,7 @@
         Trial:
         <strong id="trial-count">0</strong>
         /
-        <strong id="total-trials">100</strong>
+        <strong id="total-trials">60</strong>
 
         &nbsp;&nbsp;
 
@@ -408,7 +408,7 @@
         // Experiment Settings
         // =========================
         
-        const TOTAL_TRIALS = 100;
+        const TOTAL_TRIALS = 60;
 
         let currentTrial = 0;
         let totalMisses = 0;
@@ -423,6 +423,35 @@
         
         // Store all experimental data
          let experimentData = [];
+
+// ==========================================
+// Controlled Experimental Conditions
+// ==========================================
+
+let conditionList = [];
+let currentCondition = null;
+
+const DISTANCE_LEVELS = {
+    Near: {
+        min: 55,
+        max: 120
+    },
+
+    Medium: {
+        min: 170,
+        max: 240
+    },
+
+    Far: {
+        min: 280,
+        max: Infinity
+    }
+};
+
+const WIDTH_LEVELS = {
+    Small: 40,
+    Large: 60
+};
 
         // Get HTML elements
         const targetButtons =
@@ -449,7 +478,56 @@
 
         totalTrials.textContent = TOTAL_TRIALS;
 
+function createConditionList() {
 
+    const conditions = [];
+
+    const distanceNames = [
+        "Near",
+        "Medium",
+        "Far"
+    ];
+
+    const widthNames = [
+        "Small",
+        "Large"
+    ];
+
+    // 6 conditions × 10 repetitions
+    distanceNames.forEach(function(distance) {
+
+        widthNames.forEach(function(width) {
+
+            for (let i = 0; i < 10; i++) {
+
+                conditions.push({
+                    distance: distance,
+                    width: width
+                });
+
+            }
+
+        });
+
+    });
+
+
+    // Fisher-Yates Shuffle
+    for (let i = conditions.length - 1; i > 0; i--) {
+
+        const j =
+            Math.floor(Math.random() * (i + 1));
+
+        const temp = conditions[i];
+
+        conditions[i] = conditions[j];
+        conditions[j] = temp;
+    }
+
+
+    return conditions;
+}
+        
         // =========================
         // Start Experiment
         // =========================
@@ -462,6 +540,10 @@
             trialMisses = 0;
 
             experimentData = [];
+
+            conditionList = createConditionList();
+
+            console.table(conditionList);
             
             currentTarget = null;
             previousTarget = null;
