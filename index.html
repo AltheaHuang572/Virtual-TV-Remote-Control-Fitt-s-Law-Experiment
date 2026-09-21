@@ -408,7 +408,7 @@
         // Experiment Settings
         // =========================
         
-        const TOTAL_TRIALS = 100;
+        const TOTAL_TRIALS = 5;
 
         let currentTrial = 0;
         let totalMisses = 0;
@@ -623,11 +623,11 @@
                             A / W + 1
                         );
 
-                    //Save trail
+                    //Save trial
                     experimentData.push({
                         
                         Trial:
-                            currentTrail + 1,
+                            currentTrial + 1,
 
                         Start:
                             previousTarget.dataset.name,
