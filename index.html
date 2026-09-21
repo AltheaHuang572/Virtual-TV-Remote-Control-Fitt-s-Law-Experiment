@@ -622,7 +622,24 @@ function getButtonDistance(buttonA, buttonB) {
         // =========================
         // Generate Next Target
         // =========================
+function showStartButton() {
 
+    targetButtons.forEach(function(button) {
+        button.classList.remove("target");
+        button.classList.remove("target-small");
+        button.classList.remove("target-large");
+    });
+
+    waitingForStart = true;
+
+    currentTarget = okButton;
+
+    currentTarget.classList.add("target");
+
+    statusText.textContent =
+        "Click OK to start the next trial";
+}
+        
         function generateNextTarget() {
 
     // Remove previous visual states
