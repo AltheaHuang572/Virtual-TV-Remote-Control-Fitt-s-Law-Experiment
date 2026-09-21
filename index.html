@@ -806,11 +806,18 @@ else {
                         Trial:
                             currentTrial + 1,
 
+                         DistanceCondition:
+                            currentCondition.distance,
+
+                        WidthCondition:
+                            currentCondition.width,
+
                         Start:
                             previousTarget.dataset.name,
                         
                         Target:
                             currentTarget.dataset.name,
+                        
                         A:
                             A.toFixed(2),
                             
@@ -881,16 +888,18 @@ else {
 
             const headers = [
 
-                "Trial",
-                "Start",
-                "Target",
-                "A_px",
-                "W_px",
-                "ID_bits",
-                "MT_ms",
-                "Miss"
+    "Trial",
+    "DistanceCondition",
+    "WidthCondition",
+    "Start",
+    "Target",
+    "A_px",
+    "W_px",
+    "ID_bits",
+    "MT_ms",
+    "Miss"
 
-            ];
+];
 
 
             let csv =
@@ -900,18 +909,20 @@ else {
             experimentData.forEach(
                 function (row) {
 
-                    csv += [
+                   csv += [
 
-                        row.Trial,
-                        row.Start,
-                        row.Target,
-                        row.A,
-                        row.W,
-                        row.ID,
-                        row.MT,
-                        row.Miss
+    row.Trial,
+    row.DistanceCondition,
+    row.WidthCondition,
+    row.Start,
+    row.Target,
+    row.A,
+    row.W,
+    row.ID,
+    row.MT,
+    row.Miss
 
-                    ].join(",") + "\n";
+].join(",") + "\n";
 
                 }
             );
