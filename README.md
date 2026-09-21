@@ -18,10 +18,10 @@ _________
 使用 ChatGPT 協助設計並建立單一 HTML/JavaScript 網頁實驗，並透過 GitHub Pages 部署。
 
 實驗設計：
-3 種 Target Distance：Near / Medium / Far
-2 種 Target Width：Small / Large
-每種條件重複 10 次
-共 60 Trials
-固定從 OK 按鈕作為起始位置
-自動記錄 A、W、ID、MT、Miss
-可匯出 CSV
+- 3 種 Target Distance：Near / Medium / Far
+- 2 種 Target Width：Small / Large
+- 每種條件重複 10 次
+- 共 60 Trials
+- 固定從 OK 按鈕作為起始位置
+- 自動記錄 A、W、ID、MT、Miss
+- 可匯出 CSV
