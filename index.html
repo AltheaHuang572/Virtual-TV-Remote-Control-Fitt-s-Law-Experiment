@@ -242,6 +242,34 @@
     background-color: #999;
     cursor: not-allowed;
 }
+
+/* ==========================================
+   Fitts' Law Controlled Target Width
+   ========================================== */
+
+.target-small {
+    width: 40px !important;
+    height: 40px !important;
+
+    min-width: 40px !important;
+    min-height: 40px !important;
+
+    padding: 0 !important;
+}
+
+.target-large {
+    width: 60px !important;
+    height: 60px !important;
+
+    min-width: 60px !important;
+    min-height: 60px !important;
+
+    padding: 0 !important;
+}
+
+        .target-button {
+    box-sizing: border-box;
+}
         
     </style>
 </head>
@@ -587,9 +615,13 @@ function getButtonDistance(buttonA, buttonB) {
         function generateNextTarget() {
 
             // Remove previous highlight
-            targetButtons.forEach(function (button) {
-                button.classList.remove("target");
-            });
+           targetButtons.forEach(function (button) {
+
+    button.classList.remove("target");
+    button.classList.remove("target-small");
+    button.classList.remove("target-large");
+
+});
 
 
             // Experiment finished
@@ -709,7 +741,27 @@ else {
             currentTarget = nextTarget;
 
             currentTarget.classList.add("target");
-            
+
+// ==========================================
+// Apply Controlled Target Width
+// ==========================================
+
+if (currentTarget !== null && previousTarget !== null) {
+
+    if (currentCondition.width === "Small") {
+
+        currentTarget.classList.add("target-small");
+
+    }
+
+    else if (currentCondition.width === "Large") {
+
+        currentTarget.classList.add("target-large");
+
+    }
+
+}
+        
             console.log("New Target:", currentTarget.dataset.name);
 
             //reset miss count for this trail
