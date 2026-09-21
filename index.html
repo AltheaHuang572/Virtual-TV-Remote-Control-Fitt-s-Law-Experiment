@@ -761,7 +761,20 @@ if (currentTarget !== null && previousTarget !== null) {
     }
 
 }
-        
+            
+        console.log(
+    "Width Debug:",
+    currentCondition.width,
+    currentTarget.className,
+    currentTarget.getBoundingClientRect().width,
+    currentTarget.getBoundingClientRect().height
+);
+
+console.log(
+    "New Target:",
+    currentTarget.dataset.name
+);
+            
             console.log("New Target:", currentTarget.dataset.name);
 
             //reset miss count for this trail
