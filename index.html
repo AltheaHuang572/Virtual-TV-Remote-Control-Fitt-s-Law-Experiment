@@ -897,7 +897,11 @@ function showStartButton() {
                 }
 
     // Trial completed
+// Trial completed
 currentTrial++;
+
+// Update trial number on screen
+trialCount.textContent = currentTrial;
 
 // Experiment finished
 if (currentTrial >= TOTAL_TRIALS) {
