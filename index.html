@@ -534,6 +534,8 @@
             currentTarget = nextTarget;
 
             currentTarget.classList.add("target");
+            
+            console.log("New Target:", currentTarget.dataset.name);
 
             //reset miss count for this trail
             trailMisses = 0;
